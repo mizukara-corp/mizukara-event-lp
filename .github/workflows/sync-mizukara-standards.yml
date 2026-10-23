@@ -1,0 +1,22 @@
+name: sync-mizukara-standards
+
+# dev-standards の必須条項を AGENTS.md の区画へ同期し、差分があれば PR を開く（Issue #12 段 1）。
+# 前提: 対象 repo の Settings > Actions > General で「Allow GitHub Actions to create and approve pull requests」を ON にする。
+
+on:
+  schedule:
+    - cron: "17 0 * * 1-5"   # 平日 09:17 JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    # テンプレートリポジトリ自身では動かさない（区画が埋まると、そこから作る repo とテンプレートの検査がずれる・Issue #46）
+    if: github.repository != 'mizukara-corp/repo-template'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mizukara-corp/dev-standards/.github/actions/sync-agents-md@main
