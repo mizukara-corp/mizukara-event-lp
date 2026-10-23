@@ -6,15 +6,15 @@
 
 `https://mizukara-corp.github.io/mizukara-event-lp/<フォルダ名>/`
 
-`main` ブランチに入れると、数分で上のURLに反映されます。
+`main` ブランチに入ると、数分で上のURLに反映されます。
 
-## LPの追加のしかた
+## 運用ルール
 
-1. イベントごとにフォルダを作る（例: `2026-11-coaching-seminar/`）
-2. フォルダの中に `index.html` を置く。画像などはそのフォルダの中にまとめる
-3. `main` に入れる → `https://mizukara-corp.github.io/mizukara-event-lp/2026-11-coaching-seminar/` で公開される
+- **新しいLPの公開**: デジ戦（稲川）に依頼してください。イベントごとにフォルダ（例: `2026-11-coaching-seminar/`）を作り、`index.html` を置いて公開します
+- **公開済みLPの軽微な修正**（文言・日時・画像・リンクなど）: 作業用ブランチで修正 → プルリクエスト → デジ戦の承認後にマージ・反映
+- `main` へ直接 push はできません（ルールセットで保護しています）
 
-Claude Code に頼むときは「mizukara-event-lp に `<フォルダ名>` で LP を追加して公開して」と伝えればOKです。
+Claude Code で修正するときは、このリポジトリの `CLAUDE.md` に手順とチェック項目が書いてあるので、「`<フォルダ名>` の〇〇を直して PR を作って」と頼めばOKです。
 
 ## 注意（このリポジトリは誰でも見られます）
 
