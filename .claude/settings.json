@@ -18,5 +18,29 @@
       "Bash(gh repo archive:*)",
       "Read(**/.env*)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=\"${MIZUKARA_STANDARDS_DIR:-$HOME/.cache/mizukara-dev-standards}\"; export GIT_TERMINAL_PROMPT=0; t() { if command -v timeout >/dev/null 2>&1; then timeout \"$@\"; elif command -v gtimeout >/dev/null 2>&1; then gtimeout \"$@\"; else shift; \"$@\"; fi; }; g() { t 20 git \"$@\" >/dev/null 2>&1 || { command -v gh >/dev/null 2>&1 && t 20 git -c credential.helper= -c \"credential.helper=!gh auth git-credential\" \"$@\" >/dev/null 2>&1; }; }; if [ -d \"$d/.git\" ]; then g -C \"$d\" pull --ff-only -q; else g clone -q --depth 1 https://github.com/mizukara-corp/dev-standards.git \"$d\"; fi; if [ -f \"$d/claude/bootstrap.sh\" ]; then bash \"$d/claude/bootstrap.sh\"; else printf \"%s\" \"{\\\"systemMessage\\\": \\\"⚠️ mizukara-standards: dev-standards の共有 clone を取得できず、必須条項・hook の判定が載っていません。対処は dev-standards の templates/target-repo/README.md「取得に失敗したとき」\\\", \\\"hookSpecificOutput\\\": {\\\"hookEventName\\\": \\\"SessionStart\\\", \\\"additionalContext\\\": \\\"⚠️ mizukara-standards: dev-standards の共有 clone を取得できず、必須条項が載っていません\\\"}}\"; fi'",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=\"${MIZUKARA_STANDARDS_DIR:-$HOME/.cache/mizukara-dev-standards}\"; f=\"$d/claude/hooks/pre_tool_use.py\"; in=$(cat); ask=\"{\\\"hookSpecificOutput\\\": {\\\"hookEventName\\\": \\\"PreToolUse\\\", \\\"permissionDecision\\\": \\\"ask\\\", \\\"permissionDecisionReason\\\": \\\"mizukara-standards: 判定を実行できないため、マージ・push の可能性があるコマンドは確認します\\\"}}\"; if [ -f \"$f\" ]; then out=$(printf \"%s\" \"$in\" | python3 \"$f\") || { printf \"%s\" \"$ask\"; exit 0; }; printf \"%s\" \"$out\"; else case \"$in\" in *merge*|*push*) printf \"%s\" \"$ask\";; esac; fi'",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
   }
 }
