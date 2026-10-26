@@ -5,7 +5,9 @@ name: sync-mizukara-standards
 
 on:
   schedule:
-    - cron: "17 0 * * 1-5"   # 平日 09:17 JST
+    # 週 1 回（月曜 09:17 JST）。1 回数秒でも 1 分で課金されるので毎日は回さない（Issue #69）。
+    # 毎時 0 分は混雑で遅延・取りこぼしが起きやすいので分をずらす。
+    - cron: "17 0 * * 1"
   workflow_dispatch:
 
 permissions:
